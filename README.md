@@ -14,6 +14,8 @@
 
 6) What is the lifetime average amount spent in terms of total_amt_usd, including only the companies that spent more per order, on average, than the average of all orders.
 
+   
+
 1) Provide the name of the sales_rep in each region with the largest amount of total_amt_usd sales
    WITH new_table AS (
  select s.name as sales_repo, r.name as region_name, o.total_amt_usd
