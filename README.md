@@ -17,7 +17,9 @@
    
 
 1) Provide the name of the sales_rep in each region with the largest amount of total_amt_usd sales
-   WITH new_table AS (
+
+
+ WITH new_table AS (
  select s.name as sales_repo, r.name as region_name, o.total_amt_usd
 from orders o 
 left join accounts a 
