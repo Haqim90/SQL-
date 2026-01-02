@@ -19,25 +19,28 @@
 1) Provide the name of the sales_rep in each region with the largest amount of total_amt_usd sales
 
 
- WITH new_table AS (
- select s.name as sales_repo, r.name as region_name, o.total_amt_usd
-from orders o 
-left join accounts a 
-on o.account_id=a.id
-left join sales_reps  s
-on a.sales_rep_id=s.id
-left join region r
-on region_id=r.id),
-largest AS (select max(total_amt_usd)  as max_amount, region_name from new_table
-				group by region_name) 
+WITH t1 AS (
+     SELECT s.name rep_name, r.name region_name, SUM(o.total_amt_usd) total_amt
+      FROM sales_reps s
+      JOIN accounts a
+      ON a.sales_rep_id = s.id
+      JOIN orders o
+      ON o.account_id = a.id
+      JOIN region r
+      ON r.id = s.region_id
+      GROUP BY 1,2
+      ORDER BY 3 DESC), 
+t2 AS (
+      SELECT region_name, MAX(total_amt) total_amt
+      FROM t1
+      GROUP BY 1)
+SELECT t1.rep_name, t1.region_name, t1.total_amt
+FROM t1
+JOIN t2
+ON t1.region_name = t2.region_name AND t1.total_amt = t2.total_amt
 
-select a.sales_repo, b.region_name, max_amount
-from new_table a 
-inner join largest b 
-on a.region_name=b.region_name
-and a.total_amt_usd=b.max_amount
+<img width="526" height="387" alt="Screen Shot 2026-01-02 at 18 14 57" src="https://github.com/user-attachments/assets/20abc08c-6446-448a-a076-da75caf84e90" />
 
-<img width="676" height="354" alt="Screen Shot 2025-12-26 at 18 38 58" src="https://github.com/user-attachments/assets/8168bb26-b11d-48ce-9733-08718f71cab1" />
 
 2) For the region with the largest sales total_amt_usd, how many total orders were placed?
    
